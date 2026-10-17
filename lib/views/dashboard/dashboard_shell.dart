@@ -79,15 +79,18 @@ class _DashboardShellState extends State<DashboardShell> {
               ),
             ),
             const SizedBox(width: 12),
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: AppColors.ink,
-              child: const Text(
-                'A',
-                style: TextStyle(
-                  color: AppColors.bronze,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CircleAvatar(
+                radius: 16,
+                backgroundColor: AppColors.ink,
+                child: const Text(
+                  'A',
+                  style: TextStyle(
+                    color: AppColors.bronze,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),

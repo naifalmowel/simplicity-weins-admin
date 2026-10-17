@@ -9,6 +9,7 @@ class StoreSettingsModel {
   final String phone;
   final String whatsapp;
   final String instagram;
+  final String facebook;
   final String addressAr;
   final double latitude;
   final double longitude;
@@ -32,6 +33,7 @@ class StoreSettingsModel {
     required this.phone,
     required this.whatsapp,
     required this.instagram,
+    this.facebook = '',
     required this.addressAr,
     required this.latitude,
     required this.longitude,
@@ -55,6 +57,7 @@ class StoreSettingsModel {
       phone: AppConstants.phone,
       whatsapp: AppConstants.whatsapp,
       instagram: AppConstants.instagram,
+      facebook: '',
       addressAr: AppConstants.addressAr,
       latitude: AppConstants.defaultLat,
       longitude: AppConstants.defaultLng,
@@ -80,6 +83,7 @@ class StoreSettingsModel {
       phone: map['phone']?.toString() ?? AppConstants.phone,
       whatsapp: map['whatsapp']?.toString() ?? AppConstants.whatsapp,
       instagram: map['instagram']?.toString() ?? AppConstants.instagram,
+      facebook: map['facebook']?.toString() ?? '',
       addressAr: map['addressAr']?.toString() ?? AppConstants.addressAr,
       latitude: (map['latitude'] is num) ? (map['latitude'] as num).toDouble() : AppConstants.defaultLat,
       longitude: (map['longitude'] is num) ? (map['longitude'] as num).toDouble() : AppConstants.defaultLng,
@@ -104,6 +108,7 @@ class StoreSettingsModel {
       'phone': phone,
       'whatsapp': whatsapp,
       'instagram': instagram,
+      'facebook': facebook,
       'addressAr': addressAr,
       'latitude': latitude,
       'longitude': longitude,
@@ -127,6 +132,7 @@ class StoreSettingsModel {
     String? phone,
     String? whatsapp,
     String? instagram,
+    String? facebook,
     String? addressAr,
     double? latitude,
     double? longitude,
@@ -148,6 +154,7 @@ class StoreSettingsModel {
       phone: phone ?? this.phone,
       whatsapp: whatsapp ?? this.whatsapp,
       instagram: instagram ?? this.instagram,
+      facebook: facebook ?? this.facebook,
       addressAr: addressAr ?? this.addressAr,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,

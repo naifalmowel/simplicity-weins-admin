@@ -1,46 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simplicity Wins (سيمليسيتي وينز) - Luxury Fashion Admin Dashboard">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="simplicity_admin">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="Simplicity Wins">
+  <link rel="apple-touch-icon" href="logo.webp">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <!-- Favicon Logo -->
+  <link rel="icon" type="image/webp" href="logo.webp"/>
+  <link rel="shortcut icon" type="image/webp" href="logo.webp"/>
 
-  <title>simplicity_admin</title>
+  <title>Simplicity Wins - لوحة التحكم والإدارة</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      background-color: #171715;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      direction: rtl;
+    }
+
+    #loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .logo-pulse {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    .loader-title {
+      color: #F7F6F2;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+
+    .loader-subtitle {
+      color: #A38A65;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .progress-bar-container {
+      width: 140px;
+      height: 3px;
+      background-color: #2E2E2A;
+      border-radius: 3px;
+      margin-top: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-value {
+      width: 40%;
+      height: 100%;
+      background-color: #A38A65;
+      border-radius: 3px;
+      position: absolute;
+      animation: loadingBar 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.96);
+        box-shadow: 0 0 0 0 rgba(163, 138, 101, 0.4);
+      }
+      50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 25px 5px rgba(163, 138, 101, 0.3);
+      }
+      100% {
+        transform: scale(0.96);
+        box-shadow: 0 0 0 0 rgba(163, 138, 101, 0.4);
+      }
+    }
+
+    @keyframes loadingBar {
+      0% {
+        right: -40%;
+      }
+      50% {
+        right: 100%;
+      }
+      100% {
+        right: -40%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Brand Preloader -->
+  <div id="loading-container">
+    <img src="logo.webp" alt="Simplicity Wins Logo" class="logo-pulse" />
+    <div class="loader-title">سيمليسيتي وينز</div>
+    <div class="loader-subtitle">جاري تحميل لوحة التحكم...</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-value"></div>
+    </div>
+  </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

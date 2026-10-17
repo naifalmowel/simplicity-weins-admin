@@ -514,16 +514,19 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
 
                       // Colors Selection Chips
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'الألوان المتاحة Colors',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          const Expanded(
+                            child: Text(
+                              'الألوان المتاحة Colors',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           TextButton.icon(
                             onPressed: _addCustomColorDialog,
                             icon: const Icon(Icons.add, size: 16),
-                            label: const Text('إضافة لون جديد'),
+                            label: const Text('إضافة لون'),
                           ),
                         ],
                       ),
@@ -558,16 +561,19 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
 
                       // Badge Selector
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'شارة المنتج Badge (اختياري)',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          const Expanded(
+                            child: Text(
+                              'شارة المنتج Badge (اختياري)',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           TextButton.icon(
                             onPressed: _addCustomBadgeDialog,
                             icon: const Icon(Icons.add, size: 16),
-                            label: const Text('إضافة شارة جديدة'),
+                            label: const Text('إضافة شارة'),
                           ),
                         ],
                       ),

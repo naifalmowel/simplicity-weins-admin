@@ -14,6 +14,7 @@ class FirestoreService {
   final List<CategoryModel> _mockCategories = [];
   final List<OfferModel> _mockOffers = [];
   StoreSettingsModel _mockSettings = StoreSettingsModel.defaultSettings();
+  String _currentAdminPin = '1234';
 
   final _productsController = StreamController<List<ProductModel>>.broadcast();
   final _categoriesController = StreamController<List<CategoryModel>>.broadcast();
@@ -63,6 +64,36 @@ class FirestoreService {
         }
       } catch (e) {
         debugPrint("Error clearing Firestore collections: $e");
+      }
+    }
+  }
+
+  // ================= ADMIN SECURITY & PIN =================
+
+  Future<String> getAdminPin() async {
+    if (_firestore != null) {
+      try {
+        final doc = await _firestore!.collection('settings').doc('admin_auth').get();
+        if (doc.exists && doc.data() != null && doc.data()!['adminPin'] != null) {
+          _currentAdminPin = doc.data()!['adminPin'].toString();
+        }
+      } catch (e) {
+        debugPrint("Error fetching admin pin: $e");
+      }
+    }
+    return _currentAdminPin;
+  }
+
+  Future<void> updateAdminPin(String newPin) async {
+    _currentAdminPin = newPin.trim();
+    if (_firestore != null) {
+      try {
+        await _firestore!.collection('settings').doc('admin_auth').set({
+          'adminPin': newPin.trim(),
+          'updatedAt': Timestamp.now(),
+        }, SetOptions(merge: true));
+      } catch (e) {
+        debugPrint("Error updating admin pin: $e");
       }
     }
   }

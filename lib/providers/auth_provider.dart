@@ -57,6 +57,30 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> changePin(String newPin) async {
+    try {
+      await _authService.changeAdminPin(newPin);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll("Exception: ", "");
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> changePassword(String newPassword) async {
+    try {
+      await _authService.changeAdminPassword(newPassword);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll("Exception: ", "");
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> logout() async {
     await _authService.signOut();
     _isAuthenticated = false;

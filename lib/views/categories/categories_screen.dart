@@ -26,185 +26,211 @@ class CategoriesScreen extends StatelessWidget {
     final productsProv = Provider.of<ProductsProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Toolbar
+          // Compact Toolbar Header
           Card(
+            margin: EdgeInsets.zero,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'إدارة تصنيفات الأزياء Categories',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        const Text(
+                          'إدارة التصنيفات',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'إجمالي التصنيفات: ${categoriesProv.totalCategories}',
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceVariant,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${categoriesProv.totalCategories}',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.ink),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () => _showCategoryDialog(context),
-                    icon: const Icon(Icons.add, size: 20),
-                    label: const Text('إضافة قسم جديد'),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    height: 38,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: () => _showCategoryDialog(context),
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text('إضافة قسم جديد', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // Categories Grid
           Expanded(
             child: categoriesProv.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : categoriesProv.categories.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'لا توجد تصنيفات مضافة حالياً',
-                          style: TextStyle(color: AppColors.textMuted),
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.category_outlined, size: 56, color: AppColors.textMuted),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'لا توجد تصنيفات مسجلة حالياً',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       )
-                    : GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 320,
-                          mainAxisExtent: 260,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
-                        itemCount: categoriesProv.categories.length,
-                        itemBuilder: (ctx, index) {
-                          final category = categoriesProv.categories[index];
-                          final linkedProductsCount = productsProv.products
-                              .where((p) => p.categoryId == category.id)
-                              .length;
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          final crossAxisCount = constraints.maxWidth > 1100
+                              ? 4
+                              : (constraints.maxWidth > 700 ? 3 : (constraints.maxWidth > 480 ? 2 : 1));
 
-                          return Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Stack(
-                                    children: [
-                                      Positioned.fill(
-                                        child: Image.network(
-                                          category.imageUrl.isNotEmpty
-                                              ? category.imageUrl
-                                              : 'https://via.placeholder.com/300',
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (c, e, s) => Container(
-                                            color: AppColors.lines,
-                                            child: const Center(
-                                              child: Icon(Icons.category, color: AppColors.textMuted, size: 36),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 10,
-                                        right: 10,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.ink.withValues(alpha: 0.85),
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            '$linkedProductsCount منتج',
-                                            style: const TextStyle(
-                                              color: AppColors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              category.nameAr,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            if (category.name.isNotEmpty)
-                                              Text(
-                                                category.name,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.textSecondary,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
+                          return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: crossAxisCount,
+                              childAspectRatio: 1.1,
+                              crossAxisSpacing: 14,
+                              mainAxisSpacing: 14,
+                            ),
+                            itemCount: categoriesProv.categories.length,
+                            itemBuilder: (context, index) {
+                              final cat = categoriesProv.categories[index];
+                              final linkedProductsCount = productsProv.products
+                                  .where((p) => p.categoryId == cat.id)
+                                  .length;
+
+                              return Card(
+                                clipBehavior: Clip.antiAlias,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Stack(
                                         children: [
-                                          IconButton(
-                                            icon: const Icon(Icons.edit_outlined, size: 20),
-                                            onPressed: () => _showCategoryDialog(context, category: category),
+                                          Positioned.fill(
+                                            child: Image.network(
+                                              cat.imageUrl.isNotEmpty
+                                                  ? cat.imageUrl
+                                                  : 'https://via.placeholder.com/200',
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (c, e, s) => Container(
+                                                color: AppColors.lines,
+                                                child: const Icon(Icons.category, color: AppColors.textMuted, size: 36),
+                                              ),
+                                            ),
                                           ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 20),
-                                            onPressed: () {
-                                              if (linkedProductsCount > 0) {
-                                                CustomSnackBar.showError(
-                                                  context,
-                                                  'عذراً! لا يمكن حذف قسم "${category.nameAr}" لأنه يحتوي على $linkedProductsCount منتج مرتبط به. الرجاء نقل أو حذف المنتجات المرتبطة به أولاً.',
-                                                );
-                                                return;
-                                              }
-
-                                              ConfirmDialog.show(
-                                                context,
-                                                title: 'حذف القسم',
-                                                message: 'هل أنت تأكد من أنك تريد حذف قسم "${category.nameAr}"؟',
-                                                onConfirm: () async {
-                                                  await categoriesProv.deleteCategory(category);
-                                                  if (context.mounted) {
-                                                    CustomSnackBar.showSuccess(context, 'تم حذف القسم بنجاح');
-                                                  }
-                                                },
-                                              );
-                                            },
+                                          Positioned(
+                                            top: 8,
+                                            right: 8,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.ink.withValues(alpha: 0.8),
+                                                borderRadius: BorderRadius.circular(6),
+                                              ),
+                                              child: Text(
+                                                '$linkedProductsCount منتجات',
+                                                style: const TextStyle(
+                                                  color: AppColors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            cat.nameAr,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            cat.name.isNotEmpty ? cat.name : 'ترتيب: ${cat.displayOrder}',
+                                            style: const TextStyle(
+                                              fontSize: 11,
+                                              color: AppColors.textSecondary,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.edit_outlined, size: 18),
+                                                onPressed: () => _showCategoryDialog(context, category: cat),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 18),
+                                                onPressed: () {
+                                                  // Check linked products constraint before deleting
+                                                  if (linkedProductsCount > 0) {
+                                                    CustomSnackBar.showError(
+                                                      context,
+                                                      'لا يمكن حذف القسم لأنه مرتبط بـ $linkedProductsCount منتجات حقيقية. قم بحذف أو نقل المنتجات أولاً.',
+                                                    );
+                                                    return;
+                                                  }
+
+                                                  ConfirmDialog.show(
+                                                    context,
+                                                    title: 'حذف القسم',
+                                                    message: 'هل أنت تأكد من أنك تريد حذف قسم "${cat.nameAr}"؟',
+                                                    onConfirm: () async {
+                                                      await categoriesProv.deleteCategory(cat);
+                                                      if (context.mounted) {
+                                                        CustomSnackBar.showSuccess(context, 'تم حذف القسم بنجاح');
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -295,59 +321,115 @@ class _CategoryFormModalState extends State<_CategoryFormModal> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isMobile = screenSize.width < 600;
+
     return Dialog(
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 24,
+        vertical: isMobile ? 16 : 24,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
-        width: 500,
-        padding: const EdgeInsets.all(24),
+        width: 520,
+        constraints: BoxConstraints(
+          maxHeight: screenSize.height * 0.90,
+        ),
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.category == null ? 'إضافة قسم جديد' : 'تعديل بيانات القسم',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // Header Bar
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.category == null ? 'إضافة قسم جديد' : 'تعديل بيانات القسم',
+                      style: TextStyle(
+                        fontSize: isMobile ? 16 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
-              const Divider(height: 24),
-              TextFormField(
-                controller: _nameArController,
-                decoration: const InputDecoration(labelText: 'اسم القسم بالعربية *'),
-                validator: (v) => v == null || v.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+              const Divider(height: 20),
+
+              // Scrollable Form Body
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _nameArController,
+                        decoration: const InputDecoration(labelText: 'اسم القسم بالعربية *'),
+                        validator: (v) => v == null || v.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'اسم القسم بالإنكليزية (اختياري)'),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _orderController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(labelText: 'ترتيب العرض (1, 2, 3...)'),
+                      ),
+                      const SizedBox(height: 16),
+                      ImageUploaderBox(
+                        bucketName: SupabaseConfig.mainBucket,
+                        currentImageUrls: _imageUrls,
+                        isMultiple: false,
+                        label: 'صورة غلاف القسم Category Image',
+                        onImagesUpdated: (urls) {
+                          setState(() => _imageUrls = urls);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'اسم القسم بالإنكليزية (اختياري)'),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _orderController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'ترتيب العرض (1, 2, 3...)'),
-              ),
+
               const SizedBox(height: 16),
-              ImageUploaderBox(
-                bucketName: SupabaseConfig.mainBucket,
-                currentImageUrls: _imageUrls,
-                isMultiple: false,
-                label: 'صورة غلاف القسم',
-                onImagesUpdated: (urls) {
-                  setState(() => _imageUrls = urls);
-                },
-              ),
-              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 12),
+
+              // Action Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 20, vertical: 12),
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Text('إلغاء'),
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.ink,
+                      foregroundColor: AppColors.white,
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 24, vertical: 12),
+                    ),
                     onPressed: _isSaving ? null : _submit,
-                    child: Text(_isSaving ? 'جاري الحفظ...' : 'حفظ القسم'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white),
+                          )
+                        : const Text('حفظ القسم', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

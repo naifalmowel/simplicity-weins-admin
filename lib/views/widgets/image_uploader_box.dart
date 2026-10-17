@@ -30,6 +30,13 @@ class _ImageUploaderBoxState extends State<ImageUploaderBox> {
   String _statusText = '';
 
   Future<void> _pickAndUploadImages() async {
+    // Show immediate loader as soon as the user taps the button
+    setState(() {
+      _isUploading = true;
+      _uploadProgress = 0.05;
+      _statusText = 'جاري فتح نافذة اختيار الصور...';
+    });
+
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -37,13 +44,15 @@ class _ImageUploaderBoxState extends State<ImageUploaderBox> {
         withData: true, // Guarantees Uint8List bytes for cross-platform
       );
 
-      if (result == null || result.files.isEmpty) return;
-
-      setState(() {
-        _isUploading = true;
-        _uploadProgress = 0.1;
-        _statusText = 'جاري تحضير الصور...';
-      });
+      if (result == null || result.files.isEmpty) {
+        if (mounted) {
+          setState(() {
+            _isUploading = false;
+            _statusText = '';
+          });
+        }
+        return;
+      }
 
       if (!mounted) return;
       final storageService = Provider.of<StorageService>(context, listen: false);
@@ -55,6 +64,14 @@ class _ImageUploaderBoxState extends State<ImageUploaderBox> {
       for (var file in result.files) {
         if (file.bytes != null) {
           final fileName = file.name;
+
+          if (mounted) {
+            setState(() {
+              _statusText = 'جاري تحضير ورفع $fileName...';
+            });
+          }
+
+          // Upload original image bytes directly without compression
           final url = await storageService.uploadImageBytes(
             bytes: file.bytes!,
             fileName: fileName,
@@ -81,7 +98,7 @@ class _ImageUploaderBoxState extends State<ImageUploaderBox> {
         setState(() {
           _isUploading = false;
           _uploadProgress = 1.0;
-          _statusText = 'تم الرفع بنجاح';
+          _statusText = 'تم رفع الصورة بنجاح';
         });
       }
 

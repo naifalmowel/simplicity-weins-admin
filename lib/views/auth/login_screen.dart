@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/responsive.dart';
 import '../../providers/auth_provider.dart';
 import '../widgets/custom_snack_bar.dart';
 
@@ -59,200 +60,217 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final isMobile = Responsive.isMobile(context);
 
     return Scaffold(
       backgroundColor: AppColors.paper,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 440),
-            padding: const EdgeInsets.all(36),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.lines, width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.ink.withValues(alpha: 0.06),
-                  blurRadius: 24,
-                  offset: const Offset(0, 10),
-                ),
-              ],
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : 24,
+              vertical: 24,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Brand Header
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppColors.ink,
-                    shape: BoxShape.circle,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 420),
+              padding: EdgeInsets.all(isMobile ? 20 : 32),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.lines, width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.ink.withValues(alpha: 0.06),
+                    blurRadius: 24,
+                    offset: const Offset(0, 10),
                   ),
-                  child: const Icon(
-                    Icons.admin_panel_settings_outlined,
-                    color: AppColors.bronze,
-                    size: 36,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  AppConstants.storeNameEn,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    letterSpacing: 2,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  AppConstants.storeNameAr,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.olive,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  AppConstants.sloganEn,
-                  style: TextStyle(
-                    fontSize: 11,
-                    letterSpacing: 2,
-                    color: AppColors.textMuted,
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-                const Divider(),
-                const SizedBox(height: 20),
-
-                // Toggle Auth Mode
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: _isPinMode ? AppColors.ink : Colors.transparent,
-                          foregroundColor: _isPinMode ? AppColors.white : AppColors.ink,
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Brand Header with Official Asset Logo
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.asset(
+                      'assets/logo.webp',
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                      errorBuilder: (c, e, s) => Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: const BoxDecoration(
+                          color: AppColors.ink,
+                          shape: BoxShape.circle,
                         ),
-                        onPressed: () => setState(() => _isPinMode = true),
-                        child: const Text('رمز PIN السريع'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: !_isPinMode ? AppColors.ink : Colors.transparent,
-                          foregroundColor: !_isPinMode ? AppColors.white : AppColors.ink,
+                        child: const Icon(
+                          Icons.admin_panel_settings_outlined,
+                          color: AppColors.bronze,
+                          size: 32,
                         ),
-                        onPressed: () => setState(() => _isPinMode = false),
-                        child: const Text('بريد وكلمة مرور'),
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
-
-                if (_isPinMode) ...[
-                  // PIN Input
-                  TextField(
-                    controller: _pinController,
-                    keyboardType: TextInputType.number,
-                    obscureText: true,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      letterSpacing: 8,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: const InputDecoration(
-                      labelText: 'رمز الدخول PIN',
-                      hintText: '••••••',
-                      prefixIcon: Icon(Icons.lock_outline),
-                    ),
-                    onSubmitted: (_) => _handleLogin(),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'الرمز الافتراضي: 1234',
-                    style: TextStyle(fontSize: 12, color: AppColors.textMuted),
-                  ),
-                ] else ...[
-                  // Email Input
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'البريد الإلكتروني',
-                      hintText: 'admin@simplicity.com',
-                      prefixIcon: Icon(Icons.email_outlined),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Password Input
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      labelText: 'كلمة المرور',
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                      ),
+                  const Text(
+                    AppConstants.storeNameEn,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                      letterSpacing: 2,
                     ),
-                    onSubmitted: (_) => _handleLogin(),
                   ),
-                ],
+                  const SizedBox(height: 4),
+                  const Text(
+                    AppConstants.storeNameAr,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.olive,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    AppConstants.sloganEn,
+                    style: TextStyle(
+                      fontSize: 10,
+                      letterSpacing: 2,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
 
-                const SizedBox(height: 28),
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 20),
 
-                // Submit Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: authProvider.isLoading ? null : _handleLogin,
-                    child: authProvider.isLoading
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.white,
-                            ),
-                          )
-                        : const Text(
-                            'تسجيل الدخول إلى اللوحة',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  // Toggle Auth Mode Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: _isPinMode ? AppColors.ink : Colors.transparent,
+                            foregroundColor: _isPinMode ? AppColors.white : AppColors.ink,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
+                          onPressed: () => setState(() => _isPinMode = true),
+                          child: const Text('رمز PIN السريع'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: !_isPinMode ? AppColors.ink : Colors.transparent,
+                            foregroundColor: !_isPinMode ? AppColors.white : AppColors.ink,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onPressed: () => setState(() => _isPinMode = false),
+                          child: const Text('بريد وكلمة مرور'),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
 
-                const SizedBox(height: 20),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.location_on_outlined, size: 14, color: AppColors.textMuted),
-                    SizedBox(width: 4),
-                    Text(
-                      'التل، ريف دمشق، سوريا',
+                  const SizedBox(height: 20),
+
+                  if (_isPinMode) ...[
+                    // PIN Input
+                    TextField(
+                      controller: _pinController,
+                      keyboardType: TextInputType.number,
+                      obscureText: true,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        letterSpacing: 8,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      decoration: const InputDecoration(
+                        labelText: 'رمز الدخول PIN',
+                        hintText: '••••',
+                        prefixIcon: Icon(Icons.lock_outline),
+                      ),
+                      onSubmitted: (_) => _handleLogin(),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'الرمز الافتراضي: 1234',
                       style: TextStyle(fontSize: 12, color: AppColors.textMuted),
                     ),
+                  ] else ...[
+                    // Email Input
+                    TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        labelText: 'البريد الإلكتروني',
+                        hintText: 'admin@simplicity.com',
+                        prefixIcon: Icon(Icons.email_outlined),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Password Input
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'كلمة المرور',
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      onSubmitted: (_) => _handleLogin(),
+                    ),
                   ],
-                ),
-              ],
+
+                  const SizedBox(height: 24),
+
+                  // Submit Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: authProvider.isLoading ? null : _handleLogin,
+                      child: authProvider.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.white,
+                              ),
+                            )
+                          : const Text(
+                              'تسجيل الدخول إلى اللوحة',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on_outlined, size: 14, color: AppColors.textMuted),
+                      SizedBox(width: 4),
+                      Text(
+                        'التل، ريف دمشق، سوريا',
+                        style: TextStyle(fontSize: 12, color: AppColors.textMuted),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

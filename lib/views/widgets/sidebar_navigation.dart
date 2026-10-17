@@ -30,59 +30,74 @@ class SidebarNavigation extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Brand Header
+          // Brand Header with Logo Asset
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             alignment: Alignment.centerRight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                const Text(
-                  AppConstants.storeNameEn,
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/logo.webp',
+                    width: 44,
+                    height: 44,
+                    fit: BoxFit.cover,
+                    errorBuilder: (c, e, s) => Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.bronze.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.admin_panel_settings, color: AppColors.bronze),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 2),
-                Row(
-                  children: [
-                    const Text(
-                      AppConstants.storeNameAr,
-                      style: TextStyle(
-                        color: AppColors.bronze,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: AppColors.olive.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        'ADMIN',
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        AppConstants.storeNameEn,
                         style: TextStyle(
-                          color: AppColors.paper,
-                          fontSize: 9,
+                          color: AppColors.white,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                          letterSpacing: 1.5,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  AppConstants.sloganEn,
-                  style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 9,
-                    letterSpacing: 1.5,
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          const Text(
+                            AppConstants.storeNameAr,
+                            style: TextStyle(
+                              color: AppColors.bronze,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: AppColors.olive.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              'ADMIN',
+                              style: TextStyle(
+                                color: AppColors.paper,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -107,8 +122,8 @@ class SidebarNavigation extends StatelessWidget {
                 _buildNavItem(
                   context,
                   index: 1,
-                  icon: Icons.checkroom_outlined,
-                  activeIcon: Icons.checkroom,
+                  icon: Icons.inventory_2_outlined,
+                  activeIcon: Icons.inventory_2,
                   title: 'المنتجات Products',
                 ),
                 _buildNavItem(

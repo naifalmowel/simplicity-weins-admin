@@ -27,13 +27,13 @@ class StorageService {
     final folderPath = (bucketName == SupabaseConfig.mainBucket || bucketName.isEmpty) ? 'general' : bucketName;
     final filePath = '$folderPath/$timestamp-$sanitizedFileName';
 
-    // List of possible bucket candidates in order
-    final candidateBuckets = [
-      SupabaseConfig.mainBucket,                     // 'Simplicity'
-      SupabaseConfig.mainBucket.toLowerCase(),        // 'simplicity'
-      bucketName,                                    // e.g. 'products'
-      bucketName.toLowerCase(),                      // e.g. 'products'
-    ].toSet().toList();
+    // Set literal of candidate buckets
+    final candidateBuckets = {
+      SupabaseConfig.mainBucket,
+      SupabaseConfig.mainBucket.toLowerCase(),
+      bucketName,
+      bucketName.toLowerCase(),
+    }.toList();
 
     if (_supabase != null) {
       for (final candidate in candidateBuckets) {

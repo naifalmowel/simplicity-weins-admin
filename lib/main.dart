@@ -62,8 +62,8 @@ class SimplicityAdminApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Services
-    final authService = AuthService();
     final firestoreService = FirestoreService();
+    final authService = AuthService(firestoreService);
     final storageService = StorageService();
 
     return MultiProvider(

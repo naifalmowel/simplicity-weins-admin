@@ -24,63 +24,88 @@ class OffersScreen extends StatelessWidget {
     final offersProv = Provider.of<OffersProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Toolbar Header
+          // Compact Toolbar Header
           Card(
+            margin: EdgeInsets.zero,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
                         const Text(
-                          'إدارة العروض والبانرات الترويجية Offers & Banners',
+                          'إدارة العروض',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'العروض النشطة حالياً: ${offersProv.activeOffersCount}',
-                          style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceVariant,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${offersProv.activeOffersCount} نشط',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.ink),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  ElevatedButton.icon(
-                    onPressed: () => _showOfferDialog(context),
-                    icon: const Icon(Icons.add, size: 20),
-                    label: const Text('إضافة عرض جديد'),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    height: 38,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: () => _showOfferDialog(context),
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text('إضافة عرض جديد', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // Offers Cards Grid
           Expanded(
             child: offersProv.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : offersProv.offers.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'لا توجد عروض ترويجية حالياً',
-                          style: TextStyle(color: AppColors.textMuted),
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.local_offer_outlined, size: 56, color: AppColors.textMuted),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'لا توجد عروض ترويجية حالياً',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     : ListView.separated(
                         itemCount: offersProv.offers.length,
-                        separatorBuilder: (ctx, i) => const SizedBox(height: 16),
+                        separatorBuilder: (ctx, i) => const SizedBox(height: 14),
                         itemBuilder: (ctx, index) {
                           final offer = offersProv.offers[index];
                           return Card(
@@ -108,7 +133,7 @@ class OffersScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(16),
+                                        padding: const EdgeInsets.all(14),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
@@ -118,7 +143,7 @@ class OffersScreen extends StatelessWidget {
                                                   child: Text(
                                                     offer.titleAr,
                                                     style: const TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight: FontWeight.bold,
                                                       color: AppColors.textPrimary,
                                                     ),
@@ -126,7 +151,7 @@ class OffersScreen extends StatelessWidget {
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                                const SizedBox(width: 10),
+                                                const SizedBox(width: 8),
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                                   decoration: BoxDecoration(
@@ -137,50 +162,50 @@ class OffersScreen extends StatelessWidget {
                                                     offer.isActive ? 'نشط' : 'غير نشط',
                                                     style: TextStyle(
                                                       color: offer.isActive ? AppColors.success : AppColors.danger,
-                                                      fontSize: 12,
+                                                      fontSize: 11,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 6),
+                                            const SizedBox(height: 4),
                                             Text(
                                               offer.descriptionAr,
-                                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                                             ),
-                                            const SizedBox(height: 12),
+                                            const SizedBox(height: 10),
                                             Wrap(
-                                              spacing: 12,
-                                              runSpacing: 8,
+                                              spacing: 10,
+                                              runSpacing: 6,
                                               children: [
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                   decoration: BoxDecoration(
                                                     color: AppColors.ink,
                                                     borderRadius: BorderRadius.circular(6),
                                                   ),
                                                   child: Text(
                                                     'زر التفاعل: ${offer.buttonText}',
-                                                    style: const TextStyle(color: AppColors.white, fontSize: 12),
+                                                    style: const TextStyle(color: AppColors.white, fontSize: 11),
                                                   ),
                                                 ),
                                                 Text(
                                                   'رابط: ${offer.buttonLink}',
-                                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 12),
+                                            const SizedBox(height: 10),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 IconButton(
-                                                  icon: const Icon(Icons.edit_outlined),
+                                                  icon: const Icon(Icons.edit_outlined, size: 18),
                                                   onPressed: () => _showOfferDialog(context, offer: offer),
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.delete_outline, color: AppColors.danger),
+                                                  icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 18),
                                                   onPressed: () {
                                                     ConfirmDialog.show(
                                                       context,
@@ -207,8 +232,8 @@ class OffersScreen extends StatelessWidget {
                                 return Row(
                                   children: [
                                     SizedBox(
-                                      width: 200,
-                                      height: 140,
+                                      width: 180,
+                                      height: 120,
                                       child: Image.network(
                                         offer.imageUrl.isNotEmpty
                                             ? offer.imageUrl
@@ -222,7 +247,7 @@ class OffersScreen extends StatelessWidget {
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(16),
+                                        padding: const EdgeInsets.all(14),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
@@ -232,7 +257,7 @@ class OffersScreen extends StatelessWidget {
                                                   child: Text(
                                                     offer.titleAr,
                                                     style: const TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight: FontWeight.bold,
                                                       color: AppColors.textPrimary,
                                                     ),
@@ -240,7 +265,7 @@ class OffersScreen extends StatelessWidget {
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                                const SizedBox(width: 10),
+                                                const SizedBox(width: 8),
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                                   decoration: BoxDecoration(
@@ -251,40 +276,40 @@ class OffersScreen extends StatelessWidget {
                                                     offer.isActive ? 'نشط' : 'غير نشط',
                                                     style: TextStyle(
                                                       color: offer.isActive ? AppColors.success : AppColors.danger,
-                                                      fontSize: 12,
+                                                      fontSize: 11,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 6),
+                                            const SizedBox(height: 4),
                                             Text(
                                               offer.descriptionAr,
-                                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                            const SizedBox(height: 12),
+                                            const SizedBox(height: 10),
                                             Wrap(
-                                              spacing: 12,
-                                              runSpacing: 8,
+                                              spacing: 10,
+                                              runSpacing: 6,
                                               crossAxisAlignment: WrapCrossAlignment.center,
                                               children: [
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                   decoration: BoxDecoration(
                                                     color: AppColors.ink,
                                                     borderRadius: BorderRadius.circular(6),
                                                   ),
                                                   child: Text(
                                                     'زر التفاعل: ${offer.buttonText}',
-                                                    style: const TextStyle(color: AppColors.white, fontSize: 12),
+                                                    style: const TextStyle(color: AppColors.white, fontSize: 11),
                                                   ),
                                                 ),
                                                 Text(
                                                   'رابط: ${offer.buttonLink}',
-                                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
                                                 ),
                                               ],
                                             ),
@@ -293,15 +318,15 @@ class OffersScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(16),
+                                      padding: const EdgeInsets.all(12),
                                       child: Column(
                                         children: [
                                           IconButton(
-                                            icon: const Icon(Icons.edit_outlined),
+                                            icon: const Icon(Icons.edit_outlined, size: 18),
                                             onPressed: () => _showOfferDialog(context, offer: offer),
                                           ),
                                           IconButton(
-                                            icon: const Icon(Icons.delete_outline, color: AppColors.danger),
+                                            icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 18),
                                             onPressed: () {
                                               ConfirmDialog.show(
                                                 context,
@@ -424,95 +449,209 @@ class _OfferFormModalState extends State<_OfferFormModal> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isMobile = screenSize.width < 600;
+
     return Dialog(
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 24,
+        vertical: isMobile ? 16 : 24,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
-        width: 600,
-        padding: const EdgeInsets.all(24),
+        width: 620,
+        constraints: BoxConstraints(
+          maxHeight: screenSize.height * 0.90,
+        ),
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.offer == null ? 'إضافة عرض ترويجي جديد' : 'تعديل بيانات العرض',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const Divider(height: 24),
+              // Modal Header Bar
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      controller: _titleArController,
-                      decoration: const InputDecoration(labelText: 'عنوان العرض بالعربية *'),
-                      validator: (v) => v == null || v.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+                    child: Text(
+                      widget.offer == null ? 'إضافة عرض ترويجي جديد' : 'تعديل بيانات العرض',
+                      style: TextStyle(
+                        fontSize: isMobile ? 16 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _titleEnController,
-                      decoration: const InputDecoration(labelText: 'العنوان بالإنكليزية'),
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
+              const Divider(height: 20),
+
+              // Modal Form Content (Scrollable)
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isCompact = constraints.maxWidth < 500;
+                          if (isCompact) {
+                            return Column(
+                              children: [
+                                TextFormField(
+                                  controller: _titleArController,
+                                  decoration: const InputDecoration(labelText: 'عنوان العرض بالعربية *'),
+                                  validator: (v) => v == null || v.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+                                ),
+                                const SizedBox(height: 12),
+                                TextFormField(
+                                  controller: _titleEnController,
+                                  decoration: const InputDecoration(labelText: 'العنوان بالإنكليزية'),
+                                ),
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _titleArController,
+                                  decoration: const InputDecoration(labelText: 'عنوان العرض بالعربية *'),
+                                  validator: (v) => v == null || v.trim().isEmpty ? 'هذا الحقل مطلوب' : null,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _titleEnController,
+                                  decoration: const InputDecoration(labelText: 'العنوان بالإنكليزية'),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _descArController,
+                        maxLines: 2,
+                        decoration: const InputDecoration(
+                          labelText: 'وصف العرض بالعربية',
+                          alignLabelWithHint: true,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isCompact = constraints.maxWidth < 500;
+                          if (isCompact) {
+                            return Column(
+                              children: [
+                                TextFormField(
+                                  controller: _btnTextController,
+                                  decoration: const InputDecoration(labelText: 'نص الزر CTA (مثال: تسوق الآن)'),
+                                ),
+                                const SizedBox(height: 12),
+                                TextFormField(
+                                  controller: _btnLinkController,
+                                  decoration: const InputDecoration(labelText: 'رابط الزر (مثل: /products)'),
+                                ),
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _btnTextController,
+                                  decoration: const InputDecoration(labelText: 'نص الزر CTA (مثال: تسوق الآن)'),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _btnLinkController,
+                                  decoration: const InputDecoration(labelText: 'رابط الزر (مثل: /products)'),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ImageUploaderBox(
+                        bucketName: SupabaseConfig.mainBucket,
+                        currentImageUrls: _imageUrls,
+                        isMultiple: false,
+                        label: 'صورة بانر العرض Banner Image',
+                        onImagesUpdated: (urls) {
+                          setState(() => _imageUrls = urls);
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceVariant.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.lines),
+                        ),
+                        child: Row(
+                          children: [
+                            Switch(
+                              value: _isActive,
+                              activeThumbColor: AppColors.success,
+                              onChanged: (v) => setState(() => _isActive = v),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'تفعيل العرض في المتجر',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+              const Divider(),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _descArController,
-                decoration: const InputDecoration(labelText: 'وصف العرض بالعربية'),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _btnTextController,
-                      decoration: const InputDecoration(labelText: 'نص الزر CTA (مثال: تسوق الآن)'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _btnLinkController,
-                      decoration: const InputDecoration(labelText: 'رابط الزر (مثل: /products)'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              ImageUploaderBox(
-                bucketName: SupabaseConfig.mainBucket,
-                currentImageUrls: _imageUrls,
-                isMultiple: false,
-                label: 'صورة بانر العرض',
-                onImagesUpdated: (urls) {
-                  setState(() => _imageUrls = urls);
-                },
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Switch(
-                    value: _isActive,
-                    activeThumbColor: AppColors.success,
-                    onChanged: (v) => setState(() => _isActive = v),
-                  ),
-                  const Text('تفعيل العرض في المتجر'),
-                ],
-              ),
-              const SizedBox(height: 16),
+
+              // Modal Footer Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 20, vertical: 12),
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Text('إلغاء'),
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.ink,
+                      foregroundColor: AppColors.white,
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 24, vertical: 12),
+                    ),
                     onPressed: _isSaving ? null : _submit,
-                    child: Text(_isSaving ? 'جاري الحفظ...' : 'حفظ العرض'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white),
+                          )
+                        : const Text('حفظ العرض', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),

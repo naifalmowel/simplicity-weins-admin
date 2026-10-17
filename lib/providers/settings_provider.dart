@@ -33,6 +33,8 @@ class SettingsProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<void> saveSettings(StoreSettingsModel newSettings) async {
+    _settings = newSettings;
+    notifyListeners();
     await _firestoreService.updateStoreSettings(newSettings);
   }
 
