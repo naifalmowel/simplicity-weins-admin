@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 class AppTheme {
   AppTheme._();
 
   static ThemeData get theme {
-    final baseTextTheme = GoogleFonts.cairoTextTheme();
-
     return ThemeData(
       useMaterial3: true,
+      fontFamily: 'Cairo',
       scaffoldBackgroundColor: AppColors.paper,
       colorScheme: ColorScheme.light(
         primary: AppColors.ink,
@@ -22,25 +20,30 @@ class AppTheme {
         error: AppColors.danger,
         outline: AppColors.lines,
       ),
-      textTheme: baseTextTheme.copyWith(
-        displayLarge: baseTextTheme.displayLarge?.copyWith(
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(
           color: AppColors.textPrimary,
           fontWeight: FontWeight.bold,
           letterSpacing: 0.5,
+          height: 1.2,
         ),
-        headlineMedium: baseTextTheme.headlineMedium?.copyWith(
+        headlineMedium: TextStyle(
           color: AppColors.textPrimary,
           fontWeight: FontWeight.w700,
+          height: 1.2,
         ),
-        titleLarge: baseTextTheme.titleLarge?.copyWith(
+        titleLarge: TextStyle(
           color: AppColors.textPrimary,
           fontWeight: FontWeight.w600,
+          height: 1.2,
         ),
-        bodyLarge: baseTextTheme.bodyLarge?.copyWith(
+        bodyLarge: TextStyle(
           color: AppColors.textPrimary,
+          height: 1.3,
         ),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(
+        bodyMedium: TextStyle(
           color: AppColors.textSecondary,
+          height: 1.3,
         ),
       ),
       cardTheme: CardThemeData(
@@ -88,13 +91,15 @@ class AppTheme {
           backgroundColor: AppColors.ink,
           foregroundColor: AppColors.white,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          textStyle: GoogleFonts.cairo(
+          textStyle: const TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 15,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
+            height: 1.2,
           ),
         ),
       ),
@@ -102,22 +107,26 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.ink,
           side: const BorderSide(color: AppColors.lines, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          textStyle: GoogleFonts.cairo(
+          textStyle: const TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 14,
             fontWeight: FontWeight.w600,
+            height: 1.2,
           ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.ink,
-          textStyle: GoogleFonts.cairo(
+          textStyle: const TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 14,
             fontWeight: FontWeight.w600,
+            height: 1.2,
           ),
         ),
       ),

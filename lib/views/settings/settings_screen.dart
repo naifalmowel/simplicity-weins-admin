@@ -740,7 +740,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Icon(Icons.admin_panel_settings_outlined, color: AppColors.ink, size: 22),
                         SizedBox(width: 8),
                         Text(
-                          'أمان وحماية اللوحة - تعديل رمز الـ PIN وكلمة المرور',
+                          'الأمان و الحماية',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.ink),
                         ),
                       ],

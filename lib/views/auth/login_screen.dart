@@ -235,11 +235,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 24),
 
-                  // Submit Button
+                  // Submit Button (Fluid Height with perfect baseline alignment)
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
                       onPressed: authProvider.isLoading ? null : _handleLogin,
                       child: authProvider.isLoading
                           ? const SizedBox(
@@ -251,8 +253,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             )
                           : const Text(
-                              'تسجيل الدخول إلى اللوحة',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                              'تسجيل الدخول',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, height: 1.2),
                             ),
                     ),
                   ),

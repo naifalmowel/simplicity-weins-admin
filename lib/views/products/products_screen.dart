@@ -20,7 +20,7 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  ProductViewMode _viewMode = ProductViewMode.gridCompact;
+  ProductViewMode _viewMode = ProductViewMode.gridLarge;
 
   @override
   Widget build(BuildContext context) {
@@ -473,19 +473,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Fashion Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
                 firstImage,
-                width: 65,
-                height: 65,
+                width: 70,
+                height: 70,
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
                 errorBuilder: (ctx, err, stack) => Container(
-                  width: 65,
-                  height: 65,
+                  width: 70,
+                  height: 70,
                   color: AppColors.lines,
                   child: const Icon(Icons.broken_image, color: AppColors.textMuted),
                 ),
@@ -493,21 +494,33 @@ class _ProductsScreenState extends State<ProductsScreen> {
             ),
             const SizedBox(width: 12),
 
-            // Product Details
+            // Product Details Column
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  // Full Product Name (Never Squeezed!)
+                  Text(
+                    product.nameAr,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, height: 1.2),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Category & Price
+                  Text(
+                    '${product.categoryName} • السعر: ${Formatters.formatCurrency(product.price)}',
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Badges & Sizes Row
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Expanded(
-                        child: Text(
-                          product.nameAr,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
                       // Availability Tag Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -524,8 +537,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           ),
                         ),
                       ),
-                      if (product.badge != null && product.badge!.isNotEmpty) ...[
-                        const SizedBox(width: 6),
+                      if (product.badge != null && product.badge!.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
@@ -537,38 +549,35 @@ class _ProductsScreenState extends State<ProductsScreen> {
                             style: const TextStyle(color: AppColors.white, fontSize: 10, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ],
+                      Text(
+                        'المقاسات: ${product.sizes.join(', ')}',
+                        style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
+                      ),
                     ],
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    '${product.categoryName} • السعر: ${Formatters.formatCurrency(product.price)}',
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'المقاسات: ${product.sizes.join(', ')}',
-                    style: const TextStyle(color: AppColors.textMuted, fontSize: 11),
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
 
-            // Action Buttons (No switch on list view as requested)
-            Row(
-              mainAxisSize: MainAxisSize.min,
+            // Action Buttons
+            Column(
               children: [
                 IconButton(
                   icon: const Icon(Icons.edit_outlined, size: 18),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   tooltip: 'تعديل',
                   onPressed: () {
                     ProductFormDialog.show(context, product: product);
                   },
                 ),
+                const SizedBox(height: 10),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: AppColors.danger, size: 18),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   tooltip: 'حذف',
                   onPressed: () {
                     ConfirmDialog.show(
